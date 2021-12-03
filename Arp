@@ -1,22 +1,27 @@
-mport random
-def get_mac():
-    f=open("ip.txt","r")
-    ipl=[]
-    ipl=f.readlines()
-    ipn=random.randrange(0,len(ipl))
-    ip=ipl[ipn]
-    a = ip.split('.')
-    b = hex(int(a[0]))[2:].zfill(2) + hex(int(a[1]))[2:].zfill(2) + hex(int(a[2]))[2:].zfill(2) + hex(int(a[3]))[2:].zfill(2)
-    b = b.replace('0x', '')
-    b = b.upper()
-    mac = '-'.join(b[i: i + 2] for i in range(0, 8, 2))
-    f2=open("mac.txt","r")
-    macl=[]
-    macl=f2.readlines()
-    for i in range(len(macl)):
-        macl[i]=macl[i].replace('\n','')
-        if mac==macl[i]:
-            print("for ip address",ip,"mac address is",mac,"is at the index",i)
-        else:
-         continue
-get_mac()
+ip_file = open("practice\ip.txt", "r")
+mac_file = open("practice\mac.txt", "r")
+ip_table = [i.rstrip("\n") for i in ip_file.readlines()]
+mac_table = [i.rstrip("\n") for i in mac_file.readlines()]
+arp_table = dict(zip(ip_table, mac_table))
+
+while True:
+    read = int(
+        input(
+"""
+1. IP to MAC
+2. MAC to IP
+3.Exit Enter your choice:"""
+)
+ )
+    if read == 1:
+        read = input("Enter ip address: ")
+        print(f"Mac address is {arp_table[read]}")
+    elif read == 2:
+        read = input("Enter mac address: ")
+        print(
+            f"IP address is {list(arp_table.keys())[(list(arp_table.values()).index(read))]}"
+        )
+    elif read == 3:
+        break
+    else:
+        print("Invalid option")
